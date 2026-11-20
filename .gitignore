@@ -1,0 +1,16 @@
+# Modelli addestrati (troppo grandi per git)
+*.bin
+*.safetensors
+*.pt
+*.pth
+checkpoint-*/
+mio-modello-ai/
+mio-modello-ai-final/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Colab
+.DS_Store

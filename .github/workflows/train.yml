@@ -1,0 +1,65 @@
+name: Addestra modello AI (cloud)
+
+on:
+  workflow_dispatch:
+    inputs:
+      n_train:
+        description: "Numero di esempi di training"
+        required: false
+        default: "1500"
+      epochs:
+        description: "Numero di epoche"
+        required: false
+        default: "1"
+      n_layer:
+        description: "Layer del transformer"
+        required: false
+        default: "2"
+      n_embd:
+        description: "Dimensione embedding"
+        required: false
+        default: "128"
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installa dipendenze
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install transformers datasets accelerate
+
+      - name: Addestra il modello (nel cloud GitHub)
+        env:
+          N_TRAIN: ${{ github.event.inputs.n_train }}
+          EPOCHS: ${{ github.event.inputs.epochs }}
+          N_LAYER: ${{ github.event.inputs.n_layer }}
+          N_EMBD: ${{ github.event.inputs.n_embd }}
+          MODEL_NAME: mio-modello-ai
+        run: python train.py
+
+      - name: Carica il modello addestrato come artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mio-modello-ai-addestrato
+          path: mio-modello-ai-final/
+          retention-days: 90
+
+      - name: Commit del modello nel repo (opzionale)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f mio-modello-ai-final/ || true
+          git commit -m "Modello addestrato automaticamente [skip ci]" || echo "Nessuna modifica"
+          git push || echo "Push non riuscito (normale per fork)"
+        continue-on-error: true

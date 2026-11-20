@@ -11,11 +11,23 @@ Un modello di linguaggio (GPT) addestrato **interamente nel cloud**, senza insta
 - **Open source**: codice e notebook su GitHub, liberamente modificabili.
 - **Salvataggio**: il modello addestrato può essere salvato su Hugging Face Hub o scaricato.
 
-## 🚀 Come addestrare il modello (3 passi)
+## 🚀 Metodo 1 — GitHub Actions (consigliato, 1 click, nessun login Google)
+
+Il modello viene addestrato sui server di GitHub (cloud). Tu clicchi solo "Run workflow".
+
+1. Vai su **Actions** → **"Addestra modello AI (cloud)"** → **"Run workflow"**.
+2. (Opzionale) modifica i parametri (esempi, epoche, dimensione modello).
+3. Aspetta ~5-15 minuti. Al termine trovi il modello addestrato in **Artifacts** → `mio-modello-ai-addestrato` (scaricabile).
+4. Inoltre il workflow fa il commit del modello nel repo (cartella `mio-modello-ai-final/`).
+
+> Tutto nel cloud. Niente sul tuo computer.
+
+## 🚀 Metodo 2 — Google Colab (GPU gratuita)
 
 1. Clicca il badge **"Open in Colab"** qui sopra (o apri il notebook in `notebooks/addestra_modello.ipynb`).
-2. In Colab: `Runtime → Change runtime type → T4 GPU` (gratis, nessuna carta di credito).
-3. `Runtime → Run all` e aspetta ~10-20 minuti.
+2. Accedi con il tuo account Google (richiesto da Colab).
+3. In Colab: `Runtime → Change runtime type → T4 GPU` (gratis).
+4. `Runtime → Run all` e aspetta ~10-20 minuti.
 
 Il notebook:
 - scarica il dataset `TinyStories` dal cloud,
